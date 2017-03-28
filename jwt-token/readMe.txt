@@ -1,0 +1,1 @@
+使用jwt提供的工具生成token及验证token
