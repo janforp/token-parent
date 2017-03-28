@@ -15,6 +15,8 @@ import java.util.Map;
 
 @Component
 public class TokenUtil {
+
+    private static final String SECRET = "123";
     
     /**
      * 生成token的静态方法，
@@ -25,72 +27,59 @@ public class TokenUtil {
      */
     public static String createToken(String username,long id,Integer type){
 
-        final String issuer = "https://mydomain.com/";
-        final String secret = "123";
+        final String issuer = "";
 
         final long iat = System.currentTimeMillis();
         final long exp = iat + 3600000L;
 
-        final JWTSigner signer = new JWTSigner(secret);
+        final JWTSigner signer = new JWTSigner(SECRET);
         final HashMap<String, Object> claims = new HashMap<String, Object>();
-        String audience;
+        String audience = null;
+
         switch (type) {
         case 1:
             audience = "student";
-            claims.put("id", id);
-            claims.put("audience", audience);
-            claims.put("iss", issuer);
-            claims.put("exp", exp);
-            claims.put("iat", iat);
             break;
         case 2:
             audience = "teacher";
-            claims.put("id", id);
-            claims.put("audience", audience);
-            claims.put("iss", issuer);
-            claims.put("exp", exp);
-            claims.put("iat", iat);
             break;
         case 3:
             audience = "admin";
-            claims.put("id", id);
-            claims.put("audience", audience);
-            claims.put("iss", issuer);
-            claims.put("exp", exp);
-            claims.put("iat", iat);
             break;
         case 4:
             audience = "school";
-            claims.put("id", id);
-            claims.put("audience", audience);
-            claims.put("iss", issuer);
-            claims.put("exp", exp);
-            claims.put("iat", iat);
             break;
 
         }
-        
-        final String token = signer.sign(claims);
- 
-        return token;
+        claims.put("id", id);
+        claims.put("iss", issuer);
+        claims.put("exp", exp);
+        claims.put("iat", iat);
+        claims.put("audience", audience);
+        claims.put("username",username);
+
+        return signer.sign(claims);
     }
-    
+
+
     /**
      * 解析Token，其中可以获取id参数
      */
-    public static Token parseToken(String jwtToken) throws InvalidKeyException, NoSuchAlgorithmException, IllegalStateException, SignatureException, IOException, JWTVerifyException {
-        final String secret = "123";
+    public static Token parseToken(String jwtToken) throws
+            InvalidKeyException, NoSuchAlgorithmException,
+            IllegalStateException, SignatureException, IOException, JWTVerifyException {
+
         Token token = new Token();
         try {
-            final JWTVerifier verifier = new JWTVerifier(secret);
-            Map<String, Object> claims = null;
+            final JWTVerifier verifier = new JWTVerifier(SECRET);
+            Map<String, Object> claims ;
             claims = verifier.verify(jwtToken);
             token.setId(Long.valueOf(claims.get("id").toString()));
             token.setAudience(claims.get("audience").toString());
+            token.setUsername(claims.get("username").toString());
         } catch (JWTVerifyException e) {
             System.out.println("invalid token");
         }
         return token;
     }
-   
 }

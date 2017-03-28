@@ -15,6 +15,8 @@ public class Token implements Serializable {
 
     private String issuer;
 
+    private String username;
+
     private long iat;
 
     private long exp;
@@ -57,5 +59,13 @@ public class Token implements Serializable {
 
     public void setExp(long exp) {
         this.exp = exp;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

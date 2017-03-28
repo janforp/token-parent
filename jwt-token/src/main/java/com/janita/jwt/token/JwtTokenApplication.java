@@ -14,14 +14,16 @@ import java.security.SignatureException;
  */
 public class JwtTokenApplication {
 
-    public static void main(String[] args) throws IOException, NoSuchAlgorithmException, JWTVerifyException, InvalidKeyException, SignatureException {
+    public static void main(String[] args) throws
+            IOException, NoSuchAlgorithmException, JWTVerifyException,
+            InvalidKeyException, SignatureException {
 
-        String jwtToken = TokenUtil.createToken("",10000,1);
+        String jwtToken = TokenUtil.createToken("Janita",888,1);
         System.out.println("*******"+jwtToken);
 
         Token token = TokenUtil.parseToken(jwtToken);
 
-        System.out.println("*******"+token.getId());
+        System.out.println("*******"+token.getUsername()+"********"+token.getId());
 
     }
 }
